@@ -28,7 +28,6 @@ uv add <package-name>
 uv run pytest
 uv run ruff check .
 uv run ruff format .
-uv run ruff format .
 ```
 
 ## Rules
