@@ -1,6 +1,6 @@
 # AGENTS.md
 
-## Stack
+##  Stack
 
 * **Frontend:** Node.js 24, Next.js 16, React 19, TypeScript 7, shadcn/ui — `frontend/` — port `3000`
 * **Backend:** Python 3.13, FastAPI, uv, Ruff, pytest — `backend/` — port `8000`
@@ -27,6 +27,7 @@ uv run fastapi dev
 uv add <package-name>
 uv run pytest
 uv run ruff check .
+uv run ruff format .
 uv run ruff format .
 ```
 
