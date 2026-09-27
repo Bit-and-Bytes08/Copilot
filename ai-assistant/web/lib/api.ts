@@ -46,7 +46,7 @@ export async function fetchModels(refresh = false, signal?: AbortSignal): Promis
 }
 
 export interface StreamChatOptions {
-  messages: { role: Role; content: string }[];
+  messages: { role: Role; content: string; attachments?: ChatMessage['attachments'] }[];
   selection: ModelSelection;
   signal: AbortSignal;
   onMeta: (meta: StreamMeta) => void;

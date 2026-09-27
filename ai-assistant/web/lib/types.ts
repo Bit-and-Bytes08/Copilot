@@ -47,6 +47,7 @@ export interface ChatMessage {
   error?: string;
   pending?: boolean;
   feedback?: "up" | "down" | null;
+  attachments?: { type: 'image'; data: string; mimeType: string }[];
 }
 
 export interface Conversation {

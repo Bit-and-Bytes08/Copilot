@@ -118,10 +118,39 @@ export function useChat(selection: ModelSelection, onFinish?: () => void) {
   );
 
   const send = useCallback(
-    (text: string) => {
+    async (text: string, attachment?: File) => {
       const content = text.trim();
-      if (!content || controller.current) return;
-      const userMsg: ChatMessage = { id: uid(), role: "user", content, createdAt: Date.now() };
+      if (!content && !attachment || controller.current) return;
+
+      let imageAttachment: ChatMessage['attachments'] = [];
+      if (attachment) {
+        try {
+          const base64 = await new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = reject;
+            reader.readAsDataURL(attachment);
+          });
+          // Remove the data:image/xxx;base64, prefix
+          const data = base64.split(",")[1];
+          imageAttachment = [{
+            type: 'image',
+            data: data,
+            mimeType: attachment.type,
+          }];
+        } catch (err) {
+          console.error("Failed to process image:", err);
+          // We continue sending the text if image processing fails
+        }
+      }
+
+      const userMsg: ChatMessage = {
+        id: uid(),
+        role: "user",
+        content,
+        createdAt: Date.now(),
+        attachments: imageAttachment.length ? imageAttachment : undefined
+      };
       const existing = conversations.find((c) => c.id === activeId);
       if (existing) {
         void generate(existing.id, [...existing.messages.filter((m) => !m.error), userMsg]);

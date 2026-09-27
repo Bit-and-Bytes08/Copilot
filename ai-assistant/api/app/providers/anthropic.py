@@ -54,7 +54,30 @@ class AnthropicProvider(Provider):
     ) -> AsyncIterator[str]:
         client = self._require_client()
         system = "\n\n".join(m.content for m in messages if m.role == "system")
-        turns = [{"role": m.role, "content": m.content} for m in messages if m.role != "system"]
+
+        turns = []
+        for m in messages:
+            if m.role == "system":
+                continue
+
+            content_blocks = []
+            if m.content:
+                content_blocks.append({"type": "text", "text": m.content})
+
+            if m.attachments:
+                for att in m.attachments:
+                    if att.type == "image":
+                        content_blocks.append({
+                            "type": "image",
+                            "source": {
+                                "type": "base64",
+                                "media_type": att.mimeType,
+                                "data": att.data,
+                            },
+                        })
+
+            turns.append({"role": m.role, "content": content_blocks})
+
         kwargs: dict = {"model": model, "max_tokens": DEFAULT_MAX_TOKENS, "messages": turns}
         if system:
             kwargs["system"] = system

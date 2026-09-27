@@ -7,9 +7,16 @@ from pydantic import BaseModel, Field
 Role = Literal["system", "user", "assistant"]
 
 
+class Attachment(BaseModel):
+    type: Literal["image"]
+    data: str
+    mimeType: str
+
 class ChatMessage(BaseModel):
     role: Role
     content: str = Field(max_length=200_000)
+    attachments: list[Attachment] | None = None
+
 
 
 class ChatRequest(BaseModel):
