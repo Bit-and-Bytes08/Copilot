@@ -58,4 +58,4 @@ new components into `components/ui`.
 
 - Chat history is stored in the browser (localStorage). Swap `hooks/use-chat.ts`
   persistence for your database when you add accounts.
-- App name and the placeholder user (Rizwan) live in `lib/config.ts`; replace the user with real data once you add auth.
+- App name and the placeholder user (Ali Hamza) live in `lib/config.ts`; replace the user with real data once you add auth.
